@@ -1,7 +1,9 @@
 *.pyc
+*.pt
 /*.csv
 .mypy_cache/
 results/
 sherlock/pretrained/
 tmp/
 topic_model/LDA_cache/
+scripts/output
