@@ -18,7 +18,7 @@ def get_predictions(path):
     return y_sherlock, y_pred, y_true
 
 
-def report_gen(y_pred, y_true, report_name=None, out_loc=join(os.environ['BASEPATH'], 'results', 'report')):
+def report_gen(y_pred, y_true, report_name=None, out_loc=join(os.path.dirname(__file__), '..', 'results', 'report')):
     # given predicted and true labels, 
     # generate the overall results and pertype analysis with misclassification
     report = classification_report(y_true, y_pred, output_dict=True)
@@ -68,7 +68,7 @@ def report_gen(y_pred, y_true, report_name=None, out_loc=join(os.environ['BASEPA
 
 
 def per_type_plot(result_A, result_B, name_A, name_B, comment=None,
-                  path=join(os.environ['BASEPATH'], 'results', 'figs')):
+                  path=join(os.path.dirname(__file__), '..', 'results', 'figs')):
     # produce plot that compare the per-type f1 of two apporaches.
     
     def melt_df(df):

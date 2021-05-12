@@ -86,7 +86,7 @@ corpus = args.corpus
 
 
 # Create features directory
-header_path = join(os.environ['BASEPATH'], 'extract', 'out', 'headers', TYPENAME)
+header_path = join(os.path.dirname(__file__), 'out', 'headers', TYPENAME)
 if not os.path.exists(header_path):
     os.mkdir(header_path)
 

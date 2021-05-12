@@ -29,7 +29,7 @@ def long_name_digest(name, n = 10):
 def valid_header_iter_gen(file_name, CHUNK_SIZE=500):
     TYPENAME = os.environ['TYPENAME']
 
-    valid_header_dir = os.path.join(os.environ['BASEPATH'], 'extract', 'out', 'headers', TYPENAME)
+    valid_header_dir = os.path.join(os.path.dirname(__file__), 'out', 'headers', TYPENAME)
 
     valid_header_loc = os.path.join(valid_header_dir, file_name)    
     df_header = pd.read_csv(valid_header_loc, chunksize=CHUNK_SIZE)

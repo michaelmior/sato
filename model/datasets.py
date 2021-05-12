@@ -22,16 +22,16 @@ SEED = 100
 TYPENAME = os.environ['TYPENAME']
 valid_types = get_valid_types(TYPENAME)
 
-header_path = join(os.environ['BASEPATH'], 'extract', 'out', 'headers', TYPENAME)
-feature_path = join(os.environ['BASEPATH'], 'extract', 'out', 'features', TYPENAME)
+header_path = join(os.path.dirname(__file__), '..', 'extract', 'out', 'headers', TYPENAME)
+feature_path = join(os.path.dirname(__file__), '..', 'extract', 'out', 'features', TYPENAME)
 
 # load column headers
 feature_group_cols = {}
 sherlock_feature_groups = ['char', 'word', 'par', 'rest']
 other_feature_groups = ['topic']
 for f_g in sherlock_feature_groups + other_feature_groups:
-    feature_group_cols[f_g] = list(pd.read_csv(join(os.environ['BASEPATH'],
-                                          'configs', 'feature_groups', 
+    feature_group_cols[f_g] = list(pd.read_csv(join(os.path.dirname(__file__),
+                                          '..', 'configs', 'feature_groups', 
                                           "{}_col.tsv".format(f_g)),
                                            sep='\t', header=None, 
                                            index_col=0)[1])
@@ -85,7 +85,7 @@ def generate_batches(dataset,
             yield out_data_dict, labels.to(device, non_blocking=True), masks.to(device, non_blocking=True)
 
 
-tmp_path = join(os.environ['BASEPATH'], 'tmp')
+tmp_path = join(os.path.dirname(__file__), '..', 'tmp')
 if not os.path.exists(tmp_path):
     print("tmp directory not found. create.")
     os.makedirs(tmp_path)

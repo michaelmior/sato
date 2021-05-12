@@ -13,8 +13,8 @@ valid_types = get_valid_types(TYPENAME)
 L = len(valid_types)
 
 
-tmp_path = join(os.environ['BASEPATH'], 'tmp')
-path = join(os.environ['BASEPATH'],'extract', 'out', 'headers', TYPENAME)
+tmp_path = join(os.path.dirname(__file__), '..', 'tmp')
+path = join(os.path.dirname(__file__), 'out', 'headers', TYPENAME)
 
 
 

@@ -116,7 +116,7 @@ if __name__ == "__main__":
     currentDT = datetime.datetime.now()
     DTString = '-'.join([str(x) for x in currentDT.timetuple()[:5]])
     logging_base = 'sherlock_log' #if device == torch.device('cpu') else 'sherlock_cuda_log'
-    #logging_path = join(os.environ['BASEPATH'],'results', logging_base, TYPENAME, '{}_{}_{}'.format(config_name, args.comment, DTString))
+    #logging_path = join(os.path.dirname(__file__), '..', 'results', logging_base, TYPENAME, '{}_{}_{}'.format(config_name, args.comment, DTString))
     
     logging_name = '{}_{}'.format(config_name, args.comment)
 
@@ -133,7 +133,7 @@ if __name__ == "__main__":
     if args.multi_col_eval:
         logging_name = logging_name + '_multi-col-eval'
 
-    logging_path = join(os.environ['BASEPATH'],'results', logging_base, TYPENAME, logging_name)
+    logging_path = join(os.path.dirname(__file__), '..', 'results', logging_base, TYPENAME, logging_name)
 
     print('\nlogging_name', logging_name)
 
@@ -148,7 +148,7 @@ if __name__ == "__main__":
     # load data through table instance 
     multi_tag = '_multi-col' if args.multi_col_only else ''
 
-    train_test_path = join(os.environ['BASEPATH'], 'extract', 'out', 'train_test_split')
+    train_test_path = join(os.path.dirname(__file__), '..', 'extract', 'out', 'train_test_split')
     train_list, test_list = [], []
 
     for corpus in corpus_list:
@@ -322,7 +322,7 @@ if __name__ == "__main__":
 
         torch.save(classifier.state_dict(),join(logging_path, "model.pt"))
         # save as pretrained model
-        pre_trained_loc = join(os.environ['BASEPATH'],'model','pre_trained_sherlock', TYPENAME)
+        pre_trained_loc = join(os.path.dirname(__file__), '..', 'model', 'pre_trained_sherlock', TYPENAME)
         if not os.path.exists(pre_trained_loc):
                 os.makedirs(pre_trained_loc)
 
@@ -343,7 +343,7 @@ if __name__ == "__main__":
         start_time = time()
         # load pre-trained model
         result_list = []
-        model_loc = join(os.environ['BASEPATH'],'model','pre_trained_sherlock', TYPENAME)
+        model_loc = join(os.path.dirname(__file__), '..', 'model', 'pre_trained_sherlock', TYPENAME)
         for model_path in args.model_list:
             classifier.load_state_dict(torch.load(join(model_loc, model_path), map_location=device))
             classifier.eval()

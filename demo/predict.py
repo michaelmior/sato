@@ -28,8 +28,8 @@ device = 'cpu'
 feature_group_cols = {}
 sherlock_feature_groups = ['char', 'word', 'par', 'rest']
 for f_g in sherlock_feature_groups:
-    feature_group_cols[f_g] = list(pd.read_csv(join(os.environ['BASEPATH'],
-                                          'configs', 'feature_groups', 
+    feature_group_cols[f_g] = list(pd.read_csv(join(os.path.dirname(__file__),
+                                          '..', 'configs', 'feature_groups', 
                                           "{}_col.tsv".format(f_g)),
                                            sep='\t', header=None, 
                                            index_col=0)[1])

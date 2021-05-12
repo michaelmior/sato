@@ -37,7 +37,7 @@ def name2dic(s):
 
 def get_valid_types(TYPENAME):
 
-    with open(join(os.environ['BASEPATH'], 'configs', 'types.json'), 'r') as typefile:  
+    with open(join(os.path.dirname(__file__), 'configs', 'types.json'), 'r') as typefile:  
         valid_types = json.load(typefile)[TYPENAME]
     return valid_types
 

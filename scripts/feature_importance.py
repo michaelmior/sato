@@ -163,7 +163,7 @@ if __name__ == "__main__":
     # load data through table instance 
     multi_tag = '_multi-col' if args.multi_col_only else ''
 
-    train_test_path = join(os.environ['BASEPATH'], 'extract', 'out', 'train_test_split')
+    train_test_path = join(os.path.dirname(__file__), '..', 'extract', 'out', 'train_test_split')
     org_tests, shuffle_tests = [], []
 
     for corpus in corpus_list:
@@ -209,7 +209,7 @@ if __name__ == "__main__":
     if args.model_type == 'single':
 
         # load pre-trained model
-        model_loc = join(os.environ['BASEPATH'],'model','pre_trained_sherlock', TYPENAME)
+        model_loc = join(os.path.dirname(__file__), '..', 'model', 'pre_trained_sherlock', TYPENAME)
         classifier.load_state_dict(torch.load(join(model_loc, args.model_path), map_location=device))
         classifier.eval()
 
@@ -242,7 +242,7 @@ if __name__ == "__main__":
     elif args.model_type == 'CRF':
         
         # load pre-trained model
-        model_loc = join(os.environ['BASEPATH'],'model','pre_trained_CRF', TYPENAME)
+        model_loc = join(os.path.dirname(__file__), '..', 'model', 'pre_trained_CRF', TYPENAME)
         loaded_params = torch.load(join(model_loc, args.model_path), map_location=device)
         classifier.load_state_dict(loaded_params['col_classifier'])
         model.load_state_dict(loaded_params['CRF_model'])
