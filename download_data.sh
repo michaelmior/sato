@@ -1,5 +1,3 @@
-cd $BASEPATH
-
 data_URL="http://sato-data.s3.amazonaws.com"
 
 curl "$data_URL/tmp.zip" > tmp.zip
