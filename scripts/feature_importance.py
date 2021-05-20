@@ -13,7 +13,7 @@ from sklearn.preprocessing import LabelEncoder
 from tqdm import tqdm
 import pandas as pd
 from tensorboardX import SummaryWriter
-from model.torchcrf import CRF
+from torchcrf import CRF
 
 from model import datasets
 from model.models_sherlock import FeatureEncoder, SherlockClassifier, build_sherlock
