@@ -1,8 +1,11 @@
+import copy
 import torch
 from torchcrf import CRF
 from sklearn.preprocessing import LabelEncoder
 import os
 from os.path import join
+import sys
+
 os.environ['LDA_name'] = 'num-directstr_thr-0_tn-400'
 
 import pandas as pd
@@ -58,36 +61,43 @@ model.eval()
 def extract(df):
 
     df_dic = {'df':df, 'locator':'None', 'dataset_id':'None'}
-    feature_dic = {}
+    feature_dict = {}
     n = df.shape[1]
 
     # topic vectors
     topic_features = extract_topic_features(df_dic)
-    topic_vec = pad_vec(topic_features.loc[0,'table_topic'])
-    feature_dic['topic'] = torch.FloatTensor(np.vstack((np.tile(topic_vec,(n,1)), np.zeros((MAX_COL_COUNT - n, topic_dim)))))
+    feature_dict['topic'] = pad_vec(topic_features.loc[0, 'table_topic'])
 
+    # dictionary of features
+    sherlock_features = extract_sherlock_features(df_dic)
+    return feature_dict, sherlock_features
+
+
+def evaluate(df, cols, feature_dict, sherlock_features):
+    feature_dict = copy.deepcopy(feature_dict)
+
+    n = len(cols)
+    df_cols = df.columns.tolist()
+    col_indexes = [df_cols.index(c) for c in cols]
 
     # sherlock vectors
-    sherlock_features = extract_sherlock_features(df_dic)
     for f_g in feature_group_cols:
         temp = sherlock_features[feature_group_cols[f_g]].to_numpy()
+        temp = np.take(temp, col_indexes, axis=0)
         temp = np.vstack((temp, np.zeros((MAX_COL_COUNT - n, temp.shape[1])))).astype('float')
         temp = np.nan_to_num(temp)
-        feature_dic[f_g] = torch.FloatTensor(temp)
+        feature_dict[f_g] = torch.FloatTensor(temp)
+    feature_dict['topic'] = torch.FloatTensor(np.vstack((np.tile(feature_dict['topic'], (n, 1)), np.zeros((MAX_COL_COUNT - n, topic_dim)))))
 
-    # dictionary of features, labels, masks
-    return feature_dic, np.zeros(MAX_COL_COUNT), torch.tensor([1]*n + [0]*(MAX_COL_COUNT-n), dtype=torch.uint8)
-
-
-
-def evaluate(df):
-
-    feature_dic, labels, mask = extract(df)
-
-    emissions = classifier(feature_dic).view(1, MAX_COL_COUNT, -1)
+    emissions = classifier(feature_dict).view(1, MAX_COL_COUNT, -1)
+    mask = torch.tensor([1]*n + [0]*(MAX_COL_COUNT-n), dtype=torch.uint8)
     mask = mask.view(1, MAX_COL_COUNT)
     pred = model.decode(emissions, mask)[0]
 
     return label_enc.inverse_transform(pred)
 
 
+if __name__ == '__main__':
+    df = pd.read_csv(sys.stdin)
+    feature_dict, sherlock_features = extract(df)
+    print(evaluate(df, df.columns.tolist(), feature_dict, sherlock_features))
